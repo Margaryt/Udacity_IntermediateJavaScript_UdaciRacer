@@ -1,7 +1,7 @@
 // PROVIDED CODE BELOW (LINES 1 - 80) DO NOT REMOVE
 
 // The store will hold all information needed globally
-var store = {
+let store = {
 	track_id: undefined,
 	player_id: undefined,
 	race_id: undefined,
@@ -75,7 +75,9 @@ async function delay(ms) {
 // This async function controls the flow of the race, add the logic and error handling
 async function handleCreateRace() {
 	const { player_id, track_id } = store;
-
+	if (!player_id || !track_id) {
+		alert("Please select racer and track to start the race!")
+	} else {
 	// TODO - Get player_id and track_id from the store	
 	// const race = TODO - invoke the API call to create the race, then save the result
 	try {
@@ -96,6 +98,7 @@ async function handleCreateRace() {
 	}
 
 }
+}
 
 function runRace(raceID) {
 	return new Promise(resolve => {
@@ -104,15 +107,13 @@ function runRace(raceID) {
 			/* 
 				TODO - if the race info status property is "in-progress", update the leaderboard by calling:
 				renderAt('#leaderBoard', raceProgress(res.positions))
-			*/
-			/* 
 				TODO - if the race info status property is "finished", run the following:
 				clearInterval(raceInterval) // to stop the interval from repeating
 				renderAt('#race', resultsView(res.positions)) // to render the results view
 				reslove(res) // resolve the promise
 			*/
-			const raceStatus = await getRace(raceID)
 			try {
+				const raceStatus = await getRace(raceID)
 				if (raceStatus.status === "in-progress") {
 					renderAt('#leaderBoard', raceProgress(raceStatus.positions))
 				} else if (raceStatus.status === "finished") {
@@ -311,7 +312,7 @@ function raceProgress(positions) {
 				</td>
 			</tr>
 		`
-	})
+	}).join("")
 
 	return `
 		<main>
@@ -362,7 +363,7 @@ function getRacers() {
 }
 
 function createRace(player_id, track_id) {
-	player_id = parseInt(player_id)
+	//player_id = parseInt(player_id)
 	track_id = parseInt(track_id)
 	const body = { player_id, track_id }
 
